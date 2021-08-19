@@ -1,0 +1,52 @@
+import requests
+import urllib.parse
+import pandas as pd
+import os
+
+app_id = "applicationId=1056351196251000181"
+
+def search_items(keyword):
+    url = "https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?"
+    url += app_id
+    set_keyword = "&keyword=" + urllib.parse.quote(keyword)
+    url += set_keyword
+    api_response = requests.get(url).json()
+    item_name_price = []
+    for item in api_response["Items"]:
+        item_name_price.append([item["Item"]["itemName"], item["Item"]["genreId"], item["Item"]["itemPrice"]])
+    df = pd.DataFrame(item_name_price, columns=["Name", "genreId", "price"])
+    return df
+
+def get_maxmin_price(keyword):
+    url = "https://app.rakuten.co.jp/services/api/Product/Search/20170426?"
+    url += app_id
+    url += "&format=json"
+    set_keyword = "&keyword=" + urllib.parse.quote(keyword)
+    url += set_keyword
+    api_response = requests.get(url).json()
+    item_list = []
+    for item in api_response["Products"]:
+        item_list.append([item["Product"]["productName"], item["Product"]["genreId"], item["Product"]["maxPrice"], item["Product"]["minPrice"]])
+    df = pd.DataFrame(item_list, columns=["Name", "genreId", "min_price", "max_price"])
+    return df
+
+def get_ranking(keyword):
+    pass
+
+def create_csv(data, file_name="items.csv"):
+    num = 0
+    while num == 0:
+        if os.path.exists(file_name):
+            print(f"ファイル名{file_name}は存在します。")
+            num = 0
+            file_name = input("ファイル名を入力してください >>>")
+            file_name += ".csv"
+        else:
+            data.to_csv(file_name)
+            return print("ファイルを作成しました。")
+
+if __name__ == "__main__":
+    df0 = search_items("スタンディングデスク")
+    create_csv(df0)
+    df1 = get_maxmin_price("スタンディングデスク")
+    create_csv(df1, "item_price_list.csv")
