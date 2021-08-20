@@ -30,8 +30,17 @@ def get_maxmin_price(keyword):
     df = pd.DataFrame(item_list, columns=["Name", "genreId", "min_price", "max_price"])
     return df
 
-def get_ranking(keyword):
-    pass
+def get_ranking(genre):
+    url = "https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20170628?"
+    url += app_id
+    set_genreId = "&genreId=" + str(genre)
+    url += set_genreId
+    api_response = requests.get(url).json()
+    item_list = []
+    for item in api_response["Items"]:
+        item_list.append([item["Item"]["rank"], item["Item"]["itemName"], item["Item"]["shopName"], item["Item"]["reviewCount"], item["Item"]["itemPrice"]])
+    df = pd.DataFrame(item_list, columns=["rank", "Name", "Shop", "review_num", "price"])
+    return df
 
 def create_csv(data, file_name="items.csv"):
     num = 0
@@ -46,7 +55,9 @@ def create_csv(data, file_name="items.csv"):
             return print("ファイルを作成しました。")
 
 if __name__ == "__main__":
-    df0 = search_items("スタンディングデスク")
-    create_csv(df0)
-    df1 = get_maxmin_price("スタンディングデスク")
-    create_csv(df1, "item_price_list.csv")
+    # df0 = search_items("スタンディングデスク")
+    # create_csv(df0)
+    # df1 = get_maxmin_price("スタンディングデスク")
+    # create_csv(df1, "item_price_list.csv")
+    df2 = get_ranking(100283)
+    create_csv(df2)
