@@ -8,7 +8,7 @@ APIでデータ取得⇒Google SpreadSheetへデータ保存
 https://webservice.rakuten.co.jp/document/  
   
 Google SpreadSheet API  
-参考サイト（https://note.com/npaka/n/nd522e980d995）  
+参考サイト（ https://note.com/npaka/n/nd522e980d995 ）  
   
 
 ## ライブラリ
