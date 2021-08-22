@@ -3,11 +3,11 @@ import urllib.parse
 import pandas as pd
 import os
 
-app_id = "applicationId=1056351196251000181"
+APP_ID = "applicationId=[自分のID]"
 
 def search_items(keyword):
     url = "https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?"
-    url += app_id
+    url += APP_ID
     set_keyword = "&keyword=" + urllib.parse.quote(keyword)
     url += set_keyword
     api_response = requests.get(url).json()
@@ -19,7 +19,7 @@ def search_items(keyword):
 
 def get_maxmin_price(keyword):
     url = "https://app.rakuten.co.jp/services/api/Product/Search/20170426?"
-    url += app_id
+    url += APP_ID
     url += "&format=json"
     set_keyword = "&keyword=" + urllib.parse.quote(keyword)
     url += set_keyword
@@ -32,7 +32,7 @@ def get_maxmin_price(keyword):
 
 def get_ranking(genre):
     url = "https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20170628?"
-    url += app_id
+    url += APP_ID
     set_genreId = "&genreId=" + str(genre)
     url += set_genreId
     api_response = requests.get(url).json()
@@ -55,9 +55,10 @@ def create_csv(data, file_name="items.csv"):
             return print("ファイルを作成しました。")
 
 if __name__ == "__main__":
-    # df0 = search_items("スタンディングデスク")
-    # create_csv(df0)
+    df0 = search_items("チーズケーキ")
+    create_csv(df0)
     # df1 = get_maxmin_price("スタンディングデスク")
     # create_csv(df1, "item_price_list.csv")
-    df2 = get_ranking(100283)
-    create_csv(df2)
+    # df2 = get_ranking(100283)
+    # create_csv(df2)
+    pass
